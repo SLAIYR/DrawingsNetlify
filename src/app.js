@@ -7,7 +7,7 @@ class App extends React.Component
     {
         return (
           <React.Fragment>
-            <h1>Draw me something!</h1>
+            <h1>Draw me something Dev!</h1>
             
                 <Canvas />
           </React.Fragment>
