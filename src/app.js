@@ -1,5 +1,6 @@
 import React from 'react';
 import Canvas from './canvas';
+import Hello from './hello'
 
 class App extends React.Component 
 {
@@ -7,8 +8,7 @@ class App extends React.Component
     {
         return (
           <React.Fragment>
-            <h1>Draw me something!</h1>
-            
+                <Hello />
                 <Canvas />
           </React.Fragment>
         
