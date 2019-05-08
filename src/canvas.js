@@ -9,18 +9,18 @@ class Canvas extends React.Component
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.endPaintEvent = this.endPaintEvent.bind(this);
-        this.state = {
+        /*this.state = {
           isReset: props.value
-        };
+        };*/
         
     }
     
           
     handleClick() 
     {
-        this.setState(prevState => ({
+        /*this.setState(prevState => ({
             isReset: !prevState.isReset
-        }));
+        }));*/
         
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -41,18 +41,19 @@ class Canvas extends React.Component
 
     onMouseMove({ nativeEvent }) 
     {
-        if (this.isPainting) {
-        const { offsetX, offsetY } = nativeEvent;
-        const offSetData = { offsetX, offsetY };
-        // Set the start and stop position of the paint event.
-        const positionData = 
-                {
-                    start: { ...this.prevPos },
-                    stop: { ...offSetData },
-                };
-        // Add the position to the line array
-        this.line = this.line.concat(positionData);
-        this.paint(this.prevPos, offSetData, this.userStrokeStyle);
+        if (this.isPainting) 
+        {
+            const { offsetX, offsetY } = nativeEvent;
+            const offSetData = { offsetX, offsetY };
+            // Set the start and stop position of the paint event.
+            const positionData = 
+                    {
+                        start: { ...this.prevPos },
+                        stop: { ...offSetData },
+                    };
+            // Add the position to the line array
+            this.line = this.line.concat(positionData);
+            this.paint(this.prevPos, offSetData, this.userStrokeStyle);
         }
     }
 
@@ -68,9 +69,7 @@ class Canvas extends React.Component
     {
         const { offsetX, offsetY } = currPos;
         const { offsetX: x, offsetY: y } = prevPos;
-        
-        
-        
+
         this.ctx.beginPath();
         this.ctx.strokeStyle = strokeStyle;
         // Move the the prevPosition of the mouse
@@ -99,18 +98,19 @@ class Canvas extends React.Component
     {
         return (
             
-        <React.Fragment><button onClick={() => this.handleClick()} > Tout effacer </button>
-        <br/>
-          <canvas
-          // We use the ref attribute to get direct access to the canvas element. 
-            ref={(ref) => (this.canvas = ref)}
-            style={{ background: '#F0F0F0' }}
-            onMouseDown={this.onMouseDown}
-            onMouseLeave={this.endPaintEvent}
-            onMouseUp={this.endPaintEvent}
-            onMouseMove={this.onMouseMove}
-          />
-                
+        <React.Fragment>
+            <button onClick={() => this.handleClick()} > Tout effacer </button>
+            <br/>
+            <canvas
+              // We use the ref attribute to get direct access to the canvas element. 
+                ref={(ref) => (this.canvas = ref)}
+                style={{ background: '#F0F0F0' }}
+                onMouseDown={this.onMouseDown}
+                onMouseLeave={this.endPaintEvent}
+                onMouseUp={this.endPaintEvent}
+                onMouseMove={this.onMouseMove}
+            />
+
         </React.Fragment>
         );
       }
