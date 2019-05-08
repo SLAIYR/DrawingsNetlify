@@ -1,28 +1,5 @@
 import React from 'react';
 
-class Toggle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {isToggleOn: true};
-
-    // This binding is necessary to make `this` work in the callback
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn
-        
-    }));
-  }
-
-  render() {
-    return (
-        <button onClick={this.handleClick}>
-        </button>   
-    );
-  }
-}
 
 class Canvas extends React.Component 
 {
@@ -32,9 +9,25 @@ class Canvas extends React.Component
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.endPaintEvent = this.endPaintEvent.bind(this);
+        this.state = {
+          isReset: props.value
+        };
+        
     }
+    
+          
+    handleClick() 
+    {
+        this.setState(prevState => ({
+            isReset: !prevState.isReset
+        }));
+        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    
 
     isPainting = false;
+    
     userStrokeStyle = '#FFC0CB';
     line = [];
     prevPos = { offsetX: 0, offsetY: 0 };
@@ -75,7 +68,9 @@ class Canvas extends React.Component
     {
         const { offsetX, offsetY } = currPos;
         const { offsetX: x, offsetY: y } = prevPos;
-
+        
+        
+        
         this.ctx.beginPath();
         this.ctx.strokeStyle = strokeStyle;
         // Move the the prevPosition of the mouse
@@ -85,6 +80,7 @@ class Canvas extends React.Component
         // Visualize the line using the strokeStyle
         this.ctx.stroke();
         this.prevPos = { offsetX, offsetY };
+        
     }
 
     //function called whenever the component mounted
@@ -96,11 +92,15 @@ class Canvas extends React.Component
         this.ctx.lineJoin = 'round';
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = 5;
-      }
+
+    }
 
     render() 
     {
         return (
+            
+        <React.Fragment><button onClick={() => this.handleClick()} > Tout effacer </button>
+        <br/>
           <canvas
           // We use the ref attribute to get direct access to the canvas element. 
             ref={(ref) => (this.canvas = ref)}
@@ -110,6 +110,8 @@ class Canvas extends React.Component
             onMouseUp={this.endPaintEvent}
             onMouseMove={this.onMouseMove}
           />
+                
+        </React.Fragment>
         );
       }
       
