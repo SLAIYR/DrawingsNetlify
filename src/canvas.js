@@ -16,13 +16,23 @@ class Canvas extends React.Component
     }
     
           
-    handleClick() 
+    erase() 
     {
         /*this.setState(prevState => ({
             isReset: !prevState.isReset
         }));*/
         
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    
+              
+    export() 
+    {
+          var image = this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+          var link = document.createElement('a');
+          link.download = "image.png";
+          link.href = image;
+          link.click();
     }
     
 
@@ -99,7 +109,8 @@ class Canvas extends React.Component
         return (
             
         <React.Fragment>
-            <button onClick={() => this.handleClick()} > Tout effacer </button>
+            <button onClick={() => this.export()} > Exporter</button>   
+            <button onClick={() => this.erase()} > Tout effacer </button>
             <br/>
             <canvas
               // We use the ref attribute to get direct access to the canvas element. 
