@@ -1,5 +1,31 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Notes
+
+Quand on clone le projet sur git, il faut faire un install sinon ça ne marche pas 
+### `npm install`
+
+Pour run le projet en local, on va dans le dossier du projet, ici my-app, (pas forcément dans le src) et on fait 
+### `npm start `
+
+Pour faire une nouvelle branche : 
+### `git checkout -b "mon nom de branche"`
+
+Pour switcher entre les branches :
+### `git checkout nom_branche`
+
+Pour merge deux branches :
+On va dans master : 
+### `git checkout master`
+On merge la branche souhaitée :
+### `git merge developpement`
+
+Pour commit :
+### `git add *`
+### `git commit -m "message de commit"`
+### `git push`
+
+
 ## Available Scripts
 
 In the project directory, you can run:
