@@ -95,8 +95,8 @@ class Canvas extends React.Component
     //function called whenever the component mounted
     componentDidMount() 
     {
-        this.canvas.width = 800;
-        this.canvas.height = 400;
+        this.canvas.width = 1800;
+        this.canvas.height = 800;
         this.ctx = this.canvas.getContext('2d');
         this.ctx.lineJoin = 'round';
         this.ctx.lineCap = 'round';
