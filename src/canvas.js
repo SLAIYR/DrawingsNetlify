@@ -56,11 +56,11 @@ class Canvas extends React.Component
             var destCtx = destinationCanvas.getContext('2d');
             destCtx.drawImage(this.canvas, 0, 0);
         
-            //document.getElementById('container').appendChild(img);
+            document.getElementById('container').appendChild(img);
             
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-            link.click();
+            //link.click();
     }
     
 
@@ -132,6 +132,7 @@ class Canvas extends React.Component
         this.ctx.lineJoin = 'round';
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = 5;
+        this.newStroke();
 
     }
 
@@ -148,14 +149,14 @@ class Canvas extends React.Component
                 <div id = "canvases" class="absolute">
                     <canvas
                         id = "userLayer"
-                        style={{zIndex:'0'},{position:'absolute'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
+                        style={{zIndex:'0'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
                         height ="500" width = "1100"
                     />
                             
                     <canvas
                         id = "cleanLayer"
                         ref={(ref) => (this.canvas = ref)}
-                        style={{zIndex:'1'},{position:'absolute'}, {left:'0'}, {top:'0'}, {background: 'transparent'}}
+                        style={{zIndex:'1'}, {left:'0'}, {top:'0'}, {background: 'transparent'}}
                         onMouseDown={this.onMouseDown}
                         onMouseLeave={this.endPaintEvent}
                         onMouseUp={this.endPaintEvent}
@@ -165,7 +166,8 @@ class Canvas extends React.Component
                     
             </div>
 
-            
+            <div id="container">
+            </div>
 
         </React.Fragment>
         );
