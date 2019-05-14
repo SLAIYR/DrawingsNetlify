@@ -34,10 +34,11 @@ class Canvas extends React.Component
     
     export() 
     {
-        var destinationCanvas = document.getElementById("completeDrawingLayer")
-        var destCtx = destinationCanvas.getContext('2d'); 
-        
-        var image = destinationCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        //export complete drawing
+        var completeDrawing = document.getElementById("completeDrawingLayer")
+        var image = completeDrawing.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+        //new element a which is a link (href) to the image : permits download
         var link = document.createElement('a');
         link.download = "image.png";
         link.href = image;
@@ -45,18 +46,21 @@ class Canvas extends React.Component
     }
     
     
-    newStroke() 
+    newSingleStroke() 
     {
+        //draw on complete drawing canvas
+        var destinationCanvas = document.getElementById("completeDrawingLayer")
+        var destCtx = destinationCanvas.getContext('2d');
+        destCtx.drawImage(this.canvas, 0, 0);
+
+        //new image of single stroke
         var canvasStroke = this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         var img = document.createElement('img');
         img.src = canvasStroke;
         img.style.width="300px";
         img.style.height="150px";
-        
-        var destinationCanvas = document.getElementById("completeDrawingLayer")
-        var destCtx = destinationCanvas.getContext('2d');
-        destCtx.drawImage(this.canvas, 0, 0);
     
+        //add to container the new image created
         document.getElementById('container').appendChild(img);
     }
     
@@ -68,7 +72,6 @@ class Canvas extends React.Component
         const { offsetX, offsetY } = nativeEvent;
         this.isPainting = true;
         this.prevPos = { offsetX, offsetY };
-        
     }
 
     onMouseMove({ nativeEvent }) 
@@ -94,7 +97,7 @@ class Canvas extends React.Component
         if (this.isPainting) 
         {
             this.isPainting = false;
-            this.newStroke();
+            this.newSingleStroke();
         }
     }
 
@@ -115,7 +118,6 @@ class Canvas extends React.Component
         
     }
 
-    //function called whenever the component mounted
     componentDidMount() 
     {
         this.canvas.width = 1000;
@@ -131,8 +133,8 @@ class Canvas extends React.Component
         return (
             
         <React.Fragment>
-            <button onClick={() => this.export()} > Exporter</button>   
-            <button onClick={() => this.erase()} > Tout effacer </button>
+            <button onClick={() => this.export()} > Export</button>   
+            <button onClick={() => this.erase()} > Clear all </button>
             <br/>
             
             <div id = "canvases">
@@ -140,9 +142,9 @@ class Canvas extends React.Component
                      id = "completeDrawingLayer"
                      style={{zIndex:'0'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
                      height ="500" width = "1000"
-                  />
+                />
                             
-                 <canvas
+                <canvas
                     id = "singleStrokeLayer"
                     ref={(ref) => (this.canvas = ref)}
                     style={{zIndex:'1'}, {left:'0'}, {top:'0'}, {background: 'transparent'}}
@@ -152,9 +154,10 @@ class Canvas extends React.Component
                     onMouseMove={this.onMouseMove}
                 />
                         
-                        <div id="container">
-            
-            </div>
+                <div id="container">
+
+                </div>
+
             </div>
 
             
