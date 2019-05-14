@@ -49,25 +49,23 @@ class Canvas extends React.Component
         img.src = canvasStroke;
         img.style.width="300px";
         img.style.height="150px";
-
+        
         var destinationCanvas = document.getElementById("completeDrawingLayer")
         var destCtx = destinationCanvas.getContext('2d');
         destCtx.drawImage(this.canvas, 0, 0);
     
         document.getElementById('container').appendChild(img);
-        
-        //clear the single stroke canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     
-
-    
-
     onMouseDown({ nativeEvent }) 
     {
+        //clear the single stroke canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
         const { offsetX, offsetY } = nativeEvent;
         this.isPainting = true;
         this.prevPos = { offsetX, offsetY };
+        
     }
 
     onMouseMove({ nativeEvent }) 
@@ -93,9 +91,7 @@ class Canvas extends React.Component
         if (this.isPainting) 
         {
             this.isPainting = false;
-            
             this.newStroke();
-            
         }
     }
 
@@ -125,8 +121,6 @@ class Canvas extends React.Component
         this.ctx.lineJoin = 'round';
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = 5;
-       
-
     }
 
     render() 
