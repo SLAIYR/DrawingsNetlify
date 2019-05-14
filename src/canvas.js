@@ -23,10 +23,13 @@ class Canvas extends React.Component
           
     erase() 
     {
+        //clear the complete drawing canvas
         var destinationCanvas = document.getElementById("completeDrawingLayer")
         var destCtx = destinationCanvas.getContext('2d'); 
-        
         destCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        //clear the single stroke canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     
     export() 
