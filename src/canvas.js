@@ -1,14 +1,18 @@
 import React from 'react';
 
 
+
 class Canvas extends React.Component 
 {
+    
     constructor(props) 
     {
         super(props);
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.endPaintEvent = this.endPaintEvent.bind(this);
+        this.layerNumber = 0;
+        
         /*this.state = {
           isReset: props.value
         };*/
@@ -18,21 +22,45 @@ class Canvas extends React.Component
           
     erase() 
     {
-        /*this.setState(prevState => ({
-            isReset: !prevState.isReset
-        }));*/
+        var destinationCanvas = document.getElementById("userLayer")
+        var destCtx = destinationCanvas.getContext('2d'); 
         
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        destCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     
-              
     export() 
     {
-          var image = this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-          var link = document.createElement('a');
-          link.download = "image.png";
-          link.href = image;
-          link.click();
+        var destinationCanvas = document.getElementById("userLayer")
+        var destCtx = destinationCanvas.getContext('2d'); 
+        
+        var image = destinationCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        var link = document.createElement('a');
+        link.download = "image.png";
+        link.href = image;
+        link.click();
+    }
+    
+    
+    newStroke() 
+    {
+            var image = this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            var link = document.createElement('a');
+            link.download = "image.png";
+            link.href = image;
+            //alert(image)
+        
+            var img = document.createElement('img');
+            img.src = image;
+
+            var destinationCanvas = document.getElementById("userLayer")
+            var destCtx = destinationCanvas.getContext('2d');
+            destCtx.drawImage(this.canvas, 0, 0);
+        
+            //document.getElementById('container').appendChild(img);
+            
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+            link.click();
     }
     
 
@@ -71,7 +99,10 @@ class Canvas extends React.Component
     {
         if (this.isPainting) 
         {
-          this.isPainting = false;
+            this.isPainting = false;
+            
+            this.newStroke();
+            
         }
     }
 
@@ -112,15 +143,29 @@ class Canvas extends React.Component
             <button onClick={() => this.export()} > Exporter</button>   
             <button onClick={() => this.erase()} > Tout effacer </button>
             <br/>
-            <canvas
-              // We use the ref attribute to get direct access to the canvas element. 
-                ref={(ref) => (this.canvas = ref)}
-                style={{ background: '#F0F0F0' }}
-                onMouseDown={this.onMouseDown}
-                onMouseLeave={this.endPaintEvent}
-                onMouseUp={this.endPaintEvent}
-                onMouseMove={this.onMouseMove}
-            />
+            
+            <div id ="canvasesdiv" class="relative">
+                <div id = "canvases" class="absolute">
+                    <canvas
+                        id = "userLayer"
+                        style={{zIndex:'0'},{position:'absolute'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
+                        height ="500" width = "1100"
+                    />
+                            
+                    <canvas
+                        id = "cleanLayer"
+                        ref={(ref) => (this.canvas = ref)}
+                        style={{zIndex:'1'},{position:'absolute'}, {left:'0'}, {top:'0'}, {background: 'transparent'}}
+                        onMouseDown={this.onMouseDown}
+                        onMouseLeave={this.endPaintEvent}
+                        onMouseUp={this.endPaintEvent}
+                        onMouseMove={this.onMouseMove}
+                    />
+                </div>
+                    
+            </div>
+
+            
 
         </React.Fragment>
         );
