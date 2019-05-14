@@ -4,7 +4,12 @@ import React from 'react';
 
 class Canvas extends React.Component 
 {
+    isPainting = false;
     
+    userStrokeStyle = '#FFC0CB';
+    line = [];
+    prevPos = { offsetX: 0, offsetY: 0 };
+
     constructor(props) 
     {
         super(props);
@@ -13,16 +18,12 @@ class Canvas extends React.Component
         this.endPaintEvent = this.endPaintEvent.bind(this);
         this.layerNumber = 0;
         
-        /*this.state = {
-          isReset: props.value
-        };*/
-        
     }
     
           
     erase() 
     {
-        var destinationCanvas = document.getElementById("userLayer")
+        var destinationCanvas = document.getElementById("completeDrawingLayer")
         var destCtx = destinationCanvas.getContext('2d'); 
         
         destCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -30,7 +31,7 @@ class Canvas extends React.Component
     
     export() 
     {
-        var destinationCanvas = document.getElementById("userLayer")
+        var destinationCanvas = document.getElementById("completeDrawingLayer")
         var destCtx = destinationCanvas.getContext('2d'); 
         
         var image = destinationCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
@@ -43,32 +44,24 @@ class Canvas extends React.Component
     
     newStroke() 
     {
-            var image = this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-            var link = document.createElement('a');
-            link.download = "image.png";
-            link.href = image;
-            //alert(image)
-        
-            var img = document.createElement('img');
-            img.src = image;
+        var canvasStroke = this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        var img = document.createElement('img');
+        img.src = canvasStroke;
+        img.style.width="300px";
+        img.style.height="150px";
 
-            var destinationCanvas = document.getElementById("userLayer")
-            var destCtx = destinationCanvas.getContext('2d');
-            destCtx.drawImage(this.canvas, 0, 0);
+        var destinationCanvas = document.getElementById("completeDrawingLayer")
+        var destCtx = destinationCanvas.getContext('2d');
+        destCtx.drawImage(this.canvas, 0, 0);
+    
+        document.getElementById('container').appendChild(img);
         
-            document.getElementById('container').appendChild(img);
-            
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-            //link.click();
+        //clear the single stroke canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     
 
-    isPainting = false;
     
-    userStrokeStyle = '#FFC0CB';
-    line = [];
-    prevPos = { offsetX: 0, offsetY: 0 };
 
     onMouseDown({ nativeEvent }) 
     {
@@ -126,13 +119,13 @@ class Canvas extends React.Component
     //function called whenever the component mounted
     componentDidMount() 
     {
-        this.canvas.width = 1100;
+        this.canvas.width = 1000;
         this.canvas.height = 500;
         this.ctx = this.canvas.getContext('2d');
         this.ctx.lineJoin = 'round';
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = 5;
-        this.newStroke();
+       
 
     }
 
@@ -145,29 +138,29 @@ class Canvas extends React.Component
             <button onClick={() => this.erase()} > Tout effacer </button>
             <br/>
             
-            <div id ="canvasesdiv" class="relative">
-                <div id = "canvases" class="absolute">
-                    <canvas
-                        id = "userLayer"
-                        style={{zIndex:'0'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
-                        height ="500" width = "1100"
-                    />
+            <div id = "canvases">
+                 <canvas
+                     id = "completeDrawingLayer"
+                     style={{zIndex:'0'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
+                     height ="500" width = "1000"
+                  />
                             
-                    <canvas
-                        id = "cleanLayer"
-                        ref={(ref) => (this.canvas = ref)}
-                        style={{zIndex:'1'}, {left:'0'}, {top:'0'}, {background: 'transparent'}}
-                        onMouseDown={this.onMouseDown}
-                        onMouseLeave={this.endPaintEvent}
-                        onMouseUp={this.endPaintEvent}
-                        onMouseMove={this.onMouseMove}
-                    />
-                </div>
-                    
+                 <canvas
+                    id = "singleStrokeLayer"
+                    ref={(ref) => (this.canvas = ref)}
+                    style={{zIndex:'1'}, {left:'0'}, {top:'0'}, {background: 'transparent'}}
+                    onMouseDown={this.onMouseDown}
+                    onMouseLeave={this.endPaintEvent}
+                    onMouseUp={this.endPaintEvent}
+                    onMouseMove={this.onMouseMove}
+                />
+                        
+                        <div id="container">
+            
+            </div>
             </div>
 
-            <div id="container">
-            </div>
+            
 
         </React.Fragment>
         );
