@@ -5,6 +5,10 @@ import React from 'react';
 class Canvas extends React.Component 
 {
     isPainting = false;
+    layerNo = 0;
+
+    //contains all single strokes layers drawn until now
+    layerTab = [];
     
     userStrokeStyle = '#FFC0CB';
     line = [];
@@ -16,7 +20,6 @@ class Canvas extends React.Component
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.endPaintEvent = this.endPaintEvent.bind(this);
-        this.layerNumber = 0;
         
     }
     
@@ -30,6 +33,7 @@ class Canvas extends React.Component
         
         //clear the single stroke canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     }
     
     export() 
@@ -45,9 +49,16 @@ class Canvas extends React.Component
         link.click();
     }
     
+    suppressLayer(n){
+        //Remove Picture from thumbnailDiv
+        var layer = document.getElementById("container");
+    }
     
     newSingleStroke() 
     {
+        //increase number of layer
+        this.layerNo = this.layerNo + 1;
+
         //draw on complete drawing canvas
         var destinationCanvas = document.getElementById("completeDrawingLayer")
         var destCtx = destinationCanvas.getContext('2d');
@@ -59,9 +70,26 @@ class Canvas extends React.Component
         img.src = canvasStroke;
         img.style.width="300px";
         img.style.height="150px";
-    
-        //add to container the new image created
+
         document.getElementById('container').appendChild(img);
+        this.layerTab.push(img);
+
+        /*
+        
+        var buttonDiv = document.createElement('div');
+        buttonDiv.setAttribute('id', "layer"+this.layerNo);
+
+        var layerDeleteButton = document.createElement("button");
+        layerDeleteButton.setAttribute('id', "layerDeleteButton"+this.layerNo);
+        layerDeleteButton.setAttribute('onclick', "suppressLayer("+this.layerNo+")");
+        layerDeleteButton.innerHTML = "x";
+
+        buttonDiv.appendChild(layerDeleteButton);
+        
+        //document.getElementById('container').appendChild(layerDiv);
+        //we give the div to the container
+        document.getElementById('container').appendChild(img);
+        document.getElementById('container').appendChild(layerDeleteButton);*/
     }
     
     onMouseDown({ nativeEvent }) 
@@ -126,6 +154,62 @@ class Canvas extends React.Component
         this.ctx.lineJoin = 'round';
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = 5;
+    }
+
+    exportModel()
+    {
+        var xhr = new XMLHttpRequest();
+        var url = "exportModel";
+        xhr.onreadystatechange = function() 
+        {
+            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) // 200 quand on sera en NETWORK
+            {		
+                var json=xhr.responseText;
+                //prompt("Copy to clipboard: Ctrl+C, Enter",json);
+
+                var element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json));
+                element.setAttribute('download', "model.json");
+
+                element.style.display = 'none';
+                document.body.appendChild(element);
+
+                element.click();
+
+                document.body.removeChild(element);
+            }
+        }
+    
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        
+        var canvasList = this.layerTab;
+        var shapeCanvasList = new Array();
+        var textCanvasList = new Array();
+        for(var i=0;i<canvasList.length;i++){
+            if(canvasList[i].getAttribute("layerType")=="shape"){
+                shapeCanvasList.push(canvasList[i]);
+            }
+            if(canvasList[i].getAttribute("layerType")=="text"){
+                textCanvasList.push(canvasList[i]);
+            }
+        }
+        /*var request = "engineModel="+whichEngineModelToUse;
+        request += "&shapeLayersSize="+shapeCanvasList.length;
+        request += "&textLayersSize="+textCanvasList.length;
+        var sizeShapeCanvasList = shapeCanvasList.length;
+        for(var i=0;i<sizeShapeCanvasList;i++){
+            var uri = saveCanvas(shapeCanvasList[i]);
+            var bbox = getBoundingBox(shapeCanvasList[i]);
+            request+="&uri"+i+"="+uri+"&x"+i+"="+bbox[0]+"&y"+i+"="+bbox[1]+"&w"+i+"="+bbox[2]+"&h"+i+"="+bbox[3];
+        }
+        for(var i=0;i<textCanvasList.length;i++){
+            var uri = saveCanvas(textCanvasList[i]);
+            var bbox = getBoundingBox(textCanvasList[i]);
+            request+="&uri"+(i+sizeShapeCanvasList)+"="+uri+"&x"+(i+sizeShapeCanvasList)+"="+bbox[0]+"&y"+(i+sizeShapeCanvasList)+"="+bbox[1]+"&w"+(i+sizeShapeCanvasList)+"="+bbox[2]+"&h"+(i+sizeShapeCanvasList)+"="+bbox[3];
+        }*/
+    
+        //xhr.send(request);
     }
 
     render() 
