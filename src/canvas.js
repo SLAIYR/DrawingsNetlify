@@ -25,8 +25,6 @@ class Canvas extends React.Component
         this.endPaintEvent = this.endPaintEvent.bind(this);
         
         this.state = {drawingMode: "shape"};
-
-    
         
     }
     
@@ -66,10 +64,6 @@ class Canvas extends React.Component
         link.click();
     }
     
-    suppressLayer(n){
-        //Remove Picture from thumbnailDiv
-        var layer = document.getElementById("container");
-    }
     
     newSingleStroke() 
     {
@@ -87,7 +81,6 @@ class Canvas extends React.Component
         img.src = canvasStroke;
         img.style.width="300px";
         img.style.height="150px";
-<<<<<<< HEAD
         
         //attribute 'mode=shape' or 'mode=text'
         img.setAttribute('mode', this.state.drawingMode);
@@ -98,28 +91,8 @@ class Canvas extends React.Component
         //add to container the new image created
         document.getElementById('container').appendChild(img);
         document.getElementById('container').appendChild(drawingMode);
-=======
 
-        document.getElementById('container').appendChild(img);
         this.layerTab.push(img);
-
-        /*
-        
-        var buttonDiv = document.createElement('div');
-        buttonDiv.setAttribute('id', "layer"+this.layerNo);
-
-        var layerDeleteButton = document.createElement("button");
-        layerDeleteButton.setAttribute('id', "layerDeleteButton"+this.layerNo);
-        layerDeleteButton.setAttribute('onclick', "suppressLayer("+this.layerNo+")");
-        layerDeleteButton.innerHTML = "x";
-
-        buttonDiv.appendChild(layerDeleteButton);
-        
-        //document.getElementById('container').appendChild(layerDiv);
-        //we give the div to the container
-        document.getElementById('container').appendChild(img);
-        document.getElementById('container').appendChild(layerDeleteButton);*/
->>>>>>> 6b92ea07d21657f27891a6685fdd9110875095bc
     }
     
     onMouseDown({ nativeEvent }) 
@@ -281,12 +254,7 @@ class Canvas extends React.Component
 
                 </div>
 
-           
-
             </div>
-
-            
-
         </React.Fragment>
         );
       }
