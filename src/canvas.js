@@ -88,11 +88,13 @@ class Canvas extends React.Component
         var drawingMode = document.createElement('mode');
         drawingMode.innerHTML = img.getAttribute('mode');
         
-        //new div containing image and infos, buttons...
+        /*//new div containing image and infos, buttons...
         var divThumbnail = document.createElement('div');
         divThumbnail.setAttribute('id', this.layerNo)
         divThumbnail.appendChild(img);
         divThumbnail.appendChild(drawingMode);
+        //il y a un souci de css ça met les divThumbnail à la ligne et non pas sur la même horizontalement
+        */
         
     
         //add to container the new image created
