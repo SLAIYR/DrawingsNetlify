@@ -87,6 +87,13 @@ class Canvas extends React.Component
         
         var drawingMode = document.createElement('mode');
         drawingMode.innerHTML = img.getAttribute('mode');
+        
+        //new div containing image and infos, buttons...
+        var divThumbnail = document.createElement('div');
+        divThumbnail.setAttribute('id', this.layerNo)
+        divThumbnail.appendChild(img);
+        divThumbnail.appendChild(drawingMode);
+        
     
         //add to container the new image created
         document.getElementById('container').appendChild(img);
@@ -221,18 +228,14 @@ class Canvas extends React.Component
             
         <React.Fragment>
 
-            <button onClick={() => this.export()} > Export</button>   
-            <button onClick={() => this.erase()} > Clear all </button>
+            Mode : <b>{this.state.drawingMode}</b>
+            <br/>
             <br/>
             
             <button onClick={() => this.setModeText()} > Text</button>
             <button onClick={() => this.setModeShape()} > Shapes</button>
             <br/>
-            <br/>
-            Mode : {this.state.drawingMode}
-            
-            
-            
+
             <div id = "canvases">
                  <canvas
                      id = "completeDrawingLayer"
@@ -250,11 +253,15 @@ class Canvas extends React.Component
                     onMouseMove={this.onMouseMove}
                 />
                         
+                <div id="buttons">
+                    <button onClick={() => this.export()} > Export</button>   
+                    <button onClick={() => this.erase()} > Clear all </button>
+                </div>
                 <div id="container">
 
                 </div>
-
             </div>
+
         </React.Fragment>
         );
       }
