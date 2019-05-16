@@ -10,16 +10,33 @@ class Canvas extends React.Component
     line = [];
     prevPos = { offsetX: 0, offsetY: 0 };
 
+    
+
     constructor(props) 
     {
         super(props);
+        
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.endPaintEvent = this.endPaintEvent.bind(this);
         this.layerNumber = 0;
         
+        this.state = {drawingMode: "shape"};
+
+    
+        
     }
     
+    setModeText()
+    {
+        this.setState({drawingMode: "text"});
+    }
+
+    setModeShape()
+    {
+        this.setState({drawingMode: "shape"});
+    }
+
           
     erase() 
     {
@@ -59,9 +76,16 @@ class Canvas extends React.Component
         img.src = canvasStroke;
         img.style.width="300px";
         img.style.height="150px";
+        
+        //attribute 'mode=shape' or 'mode=text'
+        img.setAttribute('mode', this.state.drawingMode);
+        
+        var drawingMode = document.createElement('mode');
+        drawingMode.innerHTML = img.getAttribute('mode');
     
         //add to container the new image created
         document.getElementById('container').appendChild(img);
+        document.getElementById('container').appendChild(drawingMode);
     }
     
     onMouseDown({ nativeEvent }) 
@@ -133,9 +157,18 @@ class Canvas extends React.Component
         return (
             
         <React.Fragment>
+
             <button onClick={() => this.export()} > Export</button>   
             <button onClick={() => this.erase()} > Clear all </button>
             <br/>
+            
+            <button onClick={() => this.setModeText()} > Text</button>
+            <button onClick={() => this.setModeShape()} > Shapes</button>
+            <br/>
+            <br/>
+            Mode : {this.state.drawingMode}
+            
+            
             
             <div id = "canvases">
                  <canvas
@@ -157,6 +190,8 @@ class Canvas extends React.Component
                 <div id="container">
 
                 </div>
+
+           
 
             </div>
 
