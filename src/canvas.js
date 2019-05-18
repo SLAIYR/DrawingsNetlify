@@ -14,6 +14,7 @@ class Canvas extends React.Component
     //contains all single strokes layers drawn until now
     canvasList = [];
     shapeCanvasList = [];
+    textCanvasList = [];
     
     userStrokeStyle = '#FFC0CB';
     line = [];
