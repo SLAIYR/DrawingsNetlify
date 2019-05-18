@@ -2,6 +2,19 @@ import React from 'react';
 
 
 
+class ShapeAndText extends React.Component 
+{
+    render () 
+    {
+        return (
+            <div>
+                <img src={this.props.image} />
+                <mode>{this.props.text}</mode>
+            </div>
+        )
+    }
+}
+
 class Canvas extends React.Component 
 {
     isPainting = false;
@@ -88,19 +101,23 @@ class Canvas extends React.Component
         var drawingMode = document.createElement('mode');
         drawingMode.innerHTML = img.getAttribute('mode');
         
-        /*//new div containing image and infos, buttons...
+        //new div containing image and infos, buttons...
         var divThumbnail = document.createElement('div');
-        divThumbnail.setAttribute('id', this.layerNo)
+        divThumbnail.setAttribute('id', this.layerNo);
+        divThumbnail.setAttribute('class', 'divThumbnail');
+        //divThumbnail.style.width="400px";
         divThumbnail.appendChild(img);
         divThumbnail.appendChild(drawingMode);
+        
         //il y a un souci de css ça met les divThumbnail à la ligne et non pas sur la même horizontalement
-        */
+        
         
     
         //add to container the new image created
-        document.getElementById('container').appendChild(img);
-        document.getElementById('container').appendChild(drawingMode);
-
+        //document.getElementById('container').appendChild(img);
+        //document.getElementById('container').appendChild(drawingMode);
+        document.getElementById('historique').appendChild(divThumbnail);
+        
         this.layerTab.push(img);
     }
     
@@ -259,7 +276,7 @@ class Canvas extends React.Component
                     <button onClick={() => this.export()} > Export</button>   
                     <button onClick={() => this.erase()} > Clear all </button>
                 </div>
-                <div id="container">
+                <div id ="historique" class="container">
 
                 </div>
             </div>

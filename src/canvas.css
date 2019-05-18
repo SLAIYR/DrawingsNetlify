@@ -1,20 +1,34 @@
 canvas {position : absolute ; }
 
+img
+{
+    position: relative;
+    display: block;
+}
+
 #buttons
 {
     position: relative;
     top: 510px;
 }
 
-#container
+.container
 {
+    position: relative;
     position: relative;
     top: 550px;
     width: 1000px;
-	border: 2px solid #000000;
-	height: 180px;
-	overflow-x: auto;
+    border: 2px solid #000;
+    height: 193px;
+    overflow-x: scroll ;
     overflow-y: hidden;
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
+.divThumbnail
+{
+    display:inline-block;
+    width: auto;
+    text-align: center;
+    border: 1px solid #000;
+}
