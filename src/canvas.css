@@ -1,4 +1,9 @@
-canvas {position : absolute ; }
+canvas 
+{
+    position : absolute ; 
+    border: 3px solid #000000;
+    border-radius: 20px;
+}
 
 img
 {
@@ -9,7 +14,7 @@ img
 #buttons
 {
     position: relative;
-    top: 510px;
+    top: 310px;
 }
 
 .container
@@ -17,12 +22,13 @@ img
     position: relative;
     position: relative;
     top: 550px;
-    width: 1000px;
-    border: 2px solid #000;
+    width: 99%;
+    border: 3px solid #000;
     height: 193px;
     overflow-x: scroll ;
     overflow-y: hidden;
     white-space: nowrap;
+    
 }
 
 .divThumbnail
@@ -31,4 +37,32 @@ img
     width: auto;
     text-align: center;
     border: 1px solid #000;
+}
+
+#myDiagramDiv {
+    
+	height: 60%;
+	background-color: #DAE4E4;
+	padding: 15px;
+	border-radius: 20px 20px 0 0;
+}
+
+#analyseDiv {
+    position : absolute ;
+    display : inline-block ;
+    left: 1050px;
+	width: 43%;
+	height: 500px;
+	border: 3px solid #000000;
+	border-radius: 20px;
+}
+#bannerModel img {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	border: 1px solid #000000;
+}
+
+#bannerModel {
+	margin-top: 10px;
 }

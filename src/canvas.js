@@ -1,19 +1,10 @@
 import React from 'react';
+import GojsDiagram from 'react-gojs';
+import ReactJson from 'react-json-view';
+import ClassBanner from './resources/class.png';
 
-
-
-class ShapeAndText extends React.Component 
-{
-    render () 
-    {
-        return (
-            <div>
-                <img src={this.props.image} />
-                <mode>{this.props.text}</mode>
-            </div>
-        )
-    }
-}
+import go from 'gojs';
+const goObj = go.GraphObject.make;
 
 class Canvas extends React.Component 
 {
@@ -21,13 +12,12 @@ class Canvas extends React.Component
     layerNo = 0;
 
     //contains all single strokes layers drawn until now
-    layerTab = [];
+    canvasList = [];
+    shapeCanvasList = [];
     
     userStrokeStyle = '#FFC0CB';
     line = [];
     prevPos = { offsetX: 0, offsetY: 0 };
-
-    
 
     constructor(props) 
     {
@@ -105,20 +95,29 @@ class Canvas extends React.Component
         var divThumbnail = document.createElement('div');
         divThumbnail.setAttribute('id', this.layerNo);
         divThumbnail.setAttribute('class', 'divThumbnail');
-        //divThumbnail.style.width="400px";
         divThumbnail.appendChild(img);
         divThumbnail.appendChild(drawingMode);
-        
-        //il y a un souci de css ça met les divThumbnail à la ligne et non pas sur la même horizontalement
-        
-        
-    
-        //add to container the new image created
-        //document.getElementById('container').appendChild(img);
-        //document.getElementById('container').appendChild(drawingMode);
+
         document.getElementById('historique').appendChild(divThumbnail);
         
-        this.layerTab.push(img);
+        //create new canvas on canvasList
+        var tempcanvas = document.createElement('canvas');
+        tempcanvas.setAttribute('id', "canvas"+this.layerNo);
+        tempcanvas.setAttribute('width', this.canvas.width);
+        tempcanvas.setAttribute('height', this.canvas.height);
+        tempcanvas.setAttribute("layerType", this.state.drawingMode);
+        tempcanvas.setAttribute("modelType", "class");
+        
+        if (this.state.drawingMode == 'shape')
+        {
+            this.shapeCanvasList.push(tempcanvas);
+        }
+        else if (this.state.drawingMode == 'text')
+        {
+            this.textCanvasList.push(tempcanvas);
+        }
+        
+        this.canvasList.push(tempcanvas);
     }
     
     onMouseDown({ nativeEvent }) 
@@ -185,54 +184,65 @@ class Canvas extends React.Component
         this.ctx.lineWidth = 5;
     }
 
-    exportModel()
+    postPictureEngineV2()
     {
         var xhr = new XMLHttpRequest();
-        var url = "exportModel";
+        var url = "localhost:8888/postPictureEngineV2";
         xhr.onreadystatechange = function() 
         {
             if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) // 200 quand on sera en NETWORK
             {		
-                var json=xhr.responseText;
-                //prompt("Copy to clipboard: Ctrl+C, Enter",json);
+                var engineDiv = document.getElementById("engineDiv");
+                var paraph = document.createElement("p");
+                var response = xhr.responseText.split("%split%");
+                paraph.innerHTML=response[0];
+                var shouldILoop=0;
+                var diagramDiv = document.getElementById("myDiagramDiv");
 
-                var element = document.createElement('a');
-                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json));
-                element.setAttribute('download', "model.json");
+                if(go.Diagram.fromDiv(diagramDiv)!=null)
+                {
+                    go.Diagram.fromDiv(diagramDiv).div = null;
+                }
 
-                element.style.display = 'none';
-                document.body.appendChild(element);
-
-                element.click();
-
-                document.body.removeChild(element);
+                ReactJson.initClass(response[1]);		// the loadFromJSON is made in initClass
+                    //loadFromJSONClass(response[1]);
             }
-        }
-    
+                //engineDiv.appendChild(paraph);
+                engineDiv.insertBefore(paraph,engineDiv.firstChild);
+		}
+	
+
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         
-        var canvasList = this.layerTab;
+        /*var canvasList = this.layerTab;
         var shapeCanvasList = new Array();
         var textCanvasList = new Array();
-        for(var i=0;i<canvasList.length;i++){
-            if(canvasList[i].getAttribute("layerType")=="shape"){
+        for(var i=0;i<canvasList.length;i++)
+        {
+            if(canvasList[i].getAttribute("layerType")=="shape")
+            {
                 shapeCanvasList.push(canvasList[i]);
             }
-            if(canvasList[i].getAttribute("layerType")=="text"){
+            if(canvasList[i].getAttribute("layerType")=="text")
+            {
                 textCanvasList.push(canvasList[i]);
             }
         }
-        /*var request = "engineModel="+whichEngineModelToUse;
+        
+        var request = "engineModel=class";
         request += "&shapeLayersSize="+shapeCanvasList.length;
         request += "&textLayersSize="+textCanvasList.length;
         var sizeShapeCanvasList = shapeCanvasList.length;
-        for(var i=0;i<sizeShapeCanvasList;i++){
+        for(var i=0;i<sizeShapeCanvasList;i++)
+        {
             var uri = saveCanvas(shapeCanvasList[i]);
             var bbox = getBoundingBox(shapeCanvasList[i]);
             request+="&uri"+i+"="+uri+"&x"+i+"="+bbox[0]+"&y"+i+"="+bbox[1]+"&w"+i+"="+bbox[2]+"&h"+i+"="+bbox[3];
         }
-        for(var i=0;i<textCanvasList.length;i++){
+        
+        for(var i=0;i<textCanvasList.length;i++)
+        {
             var uri = saveCanvas(textCanvasList[i]);
             var bbox = getBoundingBox(textCanvasList[i]);
             request+="&uri"+(i+sizeShapeCanvasList)+"="+uri+"&x"+(i+sizeShapeCanvasList)+"="+bbox[0]+"&y"+(i+sizeShapeCanvasList)+"="+bbox[1]+"&w"+(i+sizeShapeCanvasList)+"="+bbox[2]+"&h"+(i+sizeShapeCanvasList)+"="+bbox[3];
@@ -241,12 +251,22 @@ class Canvas extends React.Component
         //xhr.send(request);
     }
 
+    //saveCanvas (tempcanvas)
+    //convertit un canvas en bitmap
+    saveCanvas(tempcanvas)
+    {
+        return tempcanvas.toDataURL("image/jpeg");
+    }
+
     render() 
     {
         return (
             
         <React.Fragment>
 
+            <div id="bannerModel">
+		              <img id="banner" src={ClassBanner}/>
+	       </div>
             Mode : <b>{this.state.drawingMode}</b>
             <br/>
             <br/>
@@ -255,7 +275,7 @@ class Canvas extends React.Component
             <button onClick={() => this.setModeShape()} > Shapes</button>
             <br/>
 
-            <div id = "canvases">
+            <div id = "mainDiv">
                  <canvas
                      id = "completeDrawingLayer"
                      style={{zIndex:'0'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
@@ -272,14 +292,23 @@ class Canvas extends React.Component
                     onMouseMove={this.onMouseMove}
                 />
                         
-                <div id="buttons">
-                    <button onClick={() => this.export()} > Export</button>   
-                    <button onClick={() => this.erase()} > Clear all </button>
+                <div id="analyseDiv">
+                    <div id="myDiagramDiv">
+                    </div>
+			     
+                    <div id="engineDiv"></div>
                 </div>
+                        
+                
                 <div id ="historique" class="container">
 
                 </div>
             </div>
+
+        <div id="buttons">
+                    <button onClick={() => this.export()} > Export</button>   
+                    <button onClick={() => this.erase()} > Clear all </button>
+        </div>
 
         </React.Fragment>
         );
