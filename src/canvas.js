@@ -63,7 +63,17 @@ class Canvas extends React.Component
         
         //clear the single stroke canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+        
+        for(var i = 1; i <= this.canvasList.length; i++)
+        {
+            var node = document.getElementById("thumbnail"+i);
+            document.getElementById('historique').removeChild(node);
+        }
+        
+        this.layerNo = 0;
+        this.canvasList = [];
+        this.shapeCanvasList = [];
+        this.textCanvasList = [];
     }
     
     export() 
@@ -105,7 +115,7 @@ class Canvas extends React.Component
         
         //new div containing image and infos, buttons...
         var divThumbnail = document.createElement('div');
-        divThumbnail.setAttribute('id', this.layerNo);
+        divThumbnail.setAttribute('id', 'thumbnail'+this.layerNo);
         divThumbnail.setAttribute('class', 'divThumbnail');
         divThumbnail.appendChild(img);
         divThumbnail.appendChild(drawingMode);
@@ -120,11 +130,11 @@ class Canvas extends React.Component
         tempcanvas.setAttribute("layerType", this.state.drawingMode);
         tempcanvas.setAttribute("modelType", "class");
         
-        if (this.state.drawingMode == 'shape')
+        if (this.state.drawingMode === 'shape')
         {
             this.shapeCanvasList.push(tempcanvas);
         }
-        else if (this.state.drawingMode == 'text')
+        else if (this.state.drawingMode === 'text')
         {
             this.textCanvasList.push(tempcanvas);
         }
@@ -194,6 +204,8 @@ class Canvas extends React.Component
         this.ctx.lineJoin = 'round';
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = 5;
+        
+        this.setModeShape();
     }
 
     postPictureEngineV2()
@@ -277,7 +289,7 @@ class Canvas extends React.Component
         <React.Fragment>
 
             <div id="bannerModel">
-		              <img id="banner" src={ClassBanner}/>
+		              <img id="banner" src={ClassBanner} alt="bannière de classe"/>
 	       </div>
             <br/>
             <br/>
