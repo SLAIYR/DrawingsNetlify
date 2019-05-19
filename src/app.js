@@ -10,7 +10,6 @@ class App extends React.Component
         return (
           <React.Fragment>
             <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
-            <script type="text/javascript" src="App.js"></script>
             <script type="text/javascript" src="jquery.js"></script>
             <script type="text/javascript" src="jquery_plantuml.js"></script>
             <script src="go-debug.js"></script>

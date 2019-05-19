@@ -275,8 +275,6 @@ class Canvas extends React.Component
         //xhr.send(request);
     }
 
-    //saveCanvas (tempcanvas)
-    //convertit un canvas en bitmap
     saveCanvas(tempcanvas)
     {
         return tempcanvas.toDataURL("image/jpeg");
@@ -289,28 +287,36 @@ class Canvas extends React.Component
         <React.Fragment>
 
             <div id="bannerModel">
-		              <img id="banner" src={ClassBanner} alt="bannière de classe"/>
+		          <img id="banner" src={ClassBanner} alt="bannière de classe"/>
 	       </div>
-            <br/>
-            <br/>
             
-            <div id="buttons">
+            <div id="buttonsdiv">
+            
                 <div id = "actions" class = "actions">
-                    <div class="inner"><button onClick={() => this.export()}  class="button"> Export</button></div>   
-                    <div class="inner"><button onClick={() => this.erase()}  class="button"> Clear all </button></div>
-                        
+                    <div class="inner">
+                        <button onClick={() => this.export()}  class="button"> Export</button>
+                    </div>   
+                    <div class="inner">
+                        <button onClick={() => this.erase()}  class="button"> Clear all </button>
+                    </div>
                 </div>
+
                 <div id = "modes" class = "modes">
-                    <div class="inner"><button onClick={() => this.setModeText()} id = "text-button" class="button"> Text</button></div>
-                    <div class="inner"><button onClick={() => this.setModeShape()} id = "shape-button" class="button"> Shape</button></div>
+                    <div class="inner">
+                        <button onClick={() => this.setModeText()} id = "text-button" class="button"> Text</button>
+                    </div>
+                    <div class="inner">
+                        <button onClick={() => this.setModeShape()} id = "shape-button" class="button"> Shape</button>
+                    </div>
                 </div>
+
             </div>
 
             <div id = "mainDiv">
-                 <canvas
-                     id = "completeDrawingLayer"
-                     style={{zIndex:'0'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
-                     height ="500" width = "1000"
+                <canvas
+                    id = "completeDrawingLayer"
+                    style={{zIndex:'0'}, {left:'0'}, {top:'0'}, {background: '#E4F4FB'}}
+                    height ="500" width = "1000"
                 />
                             
                 <canvas
@@ -324,20 +330,14 @@ class Canvas extends React.Component
                 />
                         
                 <div id="analyseDiv">
-                    <div id="myDiagramDiv">
-                    </div>
-			     
+                    <div id="myDiagramDiv"></div>
                     <div id="engineDiv"></div>
                 </div>
                         
-                
                 <div id ="historique" class="container">
-
                 </div>
+
             </div>
-
-
-
         </React.Fragment>
         );
       }
