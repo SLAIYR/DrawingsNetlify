@@ -2,6 +2,8 @@ import React from 'react';
 import GojsDiagram from 'react-gojs';
 import ReactJson from 'react-json-view';
 import ClassBanner from './resources/class.png';
+import IconText from './resources/text.png';
+import IconShapes from './resources/shapes.png';
 
 import go from 'gojs';
 const goObj = go.GraphObject.make;
@@ -106,19 +108,31 @@ class Canvas extends React.Component
         img.src = canvasStroke;
         img.style.width="300px";
         img.style.height="150px";
-        
-        //attribute 'mode=shape' or 'mode=text'
         img.setAttribute('mode', this.state.drawingMode);
         
-        var drawingMode = document.createElement('mode');
-        drawingMode.innerHTML = img.getAttribute('mode');
+        var infoDiv = document.createElement('div');
+        infoDiv.setAttribute('id', 'infodiv');
+        
+        var drawingMode = document.createElement('img');
+        drawingMode.setAttribute('class', 'iconMode')
+        if (this.state.drawingMode == 'shape')
+        {
+            drawingMode.src = IconShapes;
+        }
+        if (this.state.drawingMode == 'text')
+        {
+            drawingMode.src = IconText;
+        }
+        
+        infoDiv.appendChild(drawingMode);
+       
         
         //new div containing image and infos, buttons...
         var divThumbnail = document.createElement('div');
         divThumbnail.setAttribute('id', 'thumbnail'+this.layerNo);
         divThumbnail.setAttribute('class', 'divThumbnail');
         divThumbnail.appendChild(img);
-        divThumbnail.appendChild(drawingMode);
+        divThumbnail.appendChild(infoDiv);
 
         document.getElementById('historique').appendChild(divThumbnail);
         
