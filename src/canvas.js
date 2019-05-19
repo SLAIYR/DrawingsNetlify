@@ -13,6 +13,7 @@ class Canvas extends React.Component
 
     //contains all single strokes layers drawn until now
     canvasList = [];
+
     shapeCanvasList = [];
     textCanvasList = [];
     
@@ -35,11 +36,21 @@ class Canvas extends React.Component
     setModeText()
     {
         this.setState({drawingMode: "text"});
+        var textbutton = document.getElementById('text-button');
+        textbutton.style.backgroundColor = "#E5DFFF";
+        
+        var shapebutton = document.getElementById('shape-button');
+        shapebutton.style.backgroundColor = "transparent ";
     }
 
     setModeShape()
     {
         this.setState({drawingMode: "shape"});
+        var shapebutton = document.getElementById('shape-button');
+        shapebutton.style.backgroundColor = "#E5DFFF";
+        
+        var textbutton = document.getElementById('text-button');
+        textbutton.style.backgroundColor = "transparent";
     }
 
           
@@ -268,13 +279,20 @@ class Canvas extends React.Component
             <div id="bannerModel">
 		              <img id="banner" src={ClassBanner}/>
 	       </div>
-            Mode : <b>{this.state.drawingMode}</b>
             <br/>
             <br/>
             
-            <button onClick={() => this.setModeText()} > Text</button>
-            <button onClick={() => this.setModeShape()} > Shapes</button>
-            <br/>
+            <div id="buttons">
+                <div id = "actions" class = "actions">
+                    <div class="inner"><button onClick={() => this.export()}  class="button"> Export</button></div>   
+                    <div class="inner"><button onClick={() => this.erase()}  class="button"> Clear all </button></div>
+                        
+                </div>
+                <div id = "modes" class = "modes">
+                    <div class="inner"><button onClick={() => this.setModeText()} id = "text-button" class="button"> Text</button></div>
+                    <div class="inner"><button onClick={() => this.setModeShape()} id = "shape-button" class="button"> Shape</button></div>
+                </div>
+            </div>
 
             <div id = "mainDiv">
                  <canvas
@@ -306,10 +324,7 @@ class Canvas extends React.Component
                 </div>
             </div>
 
-        <div id="buttons">
-                    <button onClick={() => this.export()} > Export</button>   
-                    <button onClick={() => this.erase()} > Clear all </button>
-        </div>
+
 
         </React.Fragment>
         );
